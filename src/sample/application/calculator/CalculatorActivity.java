@@ -11,11 +11,19 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.content.SharedPreferences;
 
 public class CalculatorActivity extends Activity {
 
-	String str = null;
+    
+    public String num1 = new String();
+    public String strTemp ="";
+    public int operator = 0;
+    public String strNum = "";
+    public String strResult ="";
 	
+    String str = null;
+	public String hoge = this.strTemp;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -88,15 +96,15 @@ public class CalculatorActivity extends Activity {
 	}
 
     public void operatorKeyOnClick(View v){
-    	if(operator!= 0){
-    		if(strTemp.length()>0){
-    			strResult = doCalc();
-    			showNumber(strResult);
+    	if(null != ""){
+    		if(this.strTemp.length()>0){
+    			this.strResult = this.doCalc();
+    			this.showNumber(this.strResult);
     		}
     	}
     	else{
-    		if(strTemp.length()>0){
-    			strResult = strTemp;
+    		if(this.strTemp.length()>0){
+    			this.strResult = this.strTemp;
     		}
     	}
     	
@@ -161,9 +169,24 @@ public class CalculatorActivity extends Activity {
     	//上二つを足す。	
     }
     
-    public String num1 = new String();
-    public String strTemp ="";
-    public String strNum = "";
-    public String strResult ="";
-    public int operator = 0;
-}
+    public void writePreferences(){
+    	SharedPreferences prefs = getSharedPreferences("CalcPrefs", MODE_PRIVATE);
+    	SharedPreferences.Editor editor = prefs.edit();
+    	editor.putString("strTemp", strTemp);
+    	editor.putString("strResult", strResult);
+    	editor.putInt("operator", operator);
+    	editor.putString("strDisplay",
+    	((TextView)findViewById(R.id.displayPanel)).getText().toString());
+    	editor.commit();
+    }
+    
+    public void readPreferences(){
+    	SharedPreferences prefs = getSharedPreferences("CalcPrefs", MODE_PRIVATE);
+    	strTemp = prefs.getString("strTemp", "");
+    	strResult = prefs.getString("strResult", "0");
+    	operator = prefs.getInt("operator", 0);
+    	((TextView)findViewById(R.id.displayPanel)) .setText(
+    		prefs.getString("strDisplay", "0"));
+    	}
+    	
+    }
