@@ -5,6 +5,7 @@ import java.text.DecimalFormat;
 
 import android.os.Bundle;
 import android.app.Activity;
+import android.text.ClipboardManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -29,8 +30,9 @@ public class CalculatorActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calculator);
+        readPreferences();
     }
-
+    
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_calculator, menu);
@@ -189,4 +191,33 @@ public class CalculatorActivity extends Activity {
     		prefs.getString("strDisplay", "0"));
     	}
     	
+    public void functionKeyOnClick(View v){
+    	switch(v.getId()){
+    	    case R.id.keypadAC:
+    	    	strTemp = "";
+    	    	strResult = "0";
+    	    	operator = 0;
+    	    	break;
+    	    case R.id.keypadC:
+    	    	strTemp = "";
+    	    	break;
+    	    case R.id.keypadBS:
+    	    	if(strTemp.length() ==0)return;
+    	    	else strTemp = strTemp.substring(0,strTemp.length()-1);
+    	    	break;
+    	    case R.id.keypadCopy:
+    	    	ClipboardManager cm = (ClipboardManager) getSystemService(
+    	    			CLIPBOARD_SERVICE);
+    	    	cm.setText(((TextView)findViewById(R.id.displayPanel)).getText());
+    	    return;	
+    	 }
+    	showNumber(strTemp);
+    	}
+
+	@Override
+	protected void onStop() {
+		super.onStop();
+		writePreferences();
+	}
+
     }
