@@ -219,5 +219,4 @@ public class CalculatorActivity extends Activity {
 		super.onStop();
 		writePreferences();
 	}
-
     }
